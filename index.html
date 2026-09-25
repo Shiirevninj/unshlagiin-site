@@ -1,0 +1,1568 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Уншлагын дасгал</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+
+      font-family: "Trebuchet MS", Arial, sans-serif;
+
+      background: #faf7f2;
+      color: #30343b;
+    }
+
+    button,
+    select,
+    textarea {
+      font-family: inherit;
+    }
+
+    .container {
+      width: min(1100px, 94%);
+      margin: 30px auto 50px;
+    }
+
+    /* ================================
+       HEADER
+    ================================= */
+
+    .header {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 34px;
+      color: #42564a;
+    }
+
+    .header p {
+      margin: 10px 0 0;
+      color: #7a807c;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+
+    /* ================================
+       MAIN CARD
+    ================================= */
+
+    .card {
+      background: #ffffff;
+      border-radius: 26px;
+      padding: 30px;
+
+      box-shadow:
+        0 10px 35px rgba(55, 65, 60, 0.07);
+    }
+
+    /* ================================
+       SETUP / TEACHER AREA
+    ================================= */
+
+    #setupArea h2 {
+      margin: 0 0 15px;
+      font-size: 21px;
+      color: #42564a;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 200px;
+
+      padding: 18px;
+
+      border: 2px solid #e6e2da;
+      border-radius: 17px;
+
+      resize: vertical;
+
+      font-size: 18px;
+      line-height: 1.65;
+
+      color: #30343b;
+      background: #fffefa;
+
+      outline: none;
+
+      transition: 0.2s;
+    }
+
+    textarea:focus {
+      border-color: #9eb2a1;
+      box-shadow: 0 0 0 4px rgba(158, 178, 161, 0.12);
+    }
+
+    textarea::placeholder {
+      color: #aaa9a5;
+    }
+
+    /* ================================
+       SETTINGS
+    ================================= */
+
+    .settings {
+      display: grid;
+
+      grid-template-columns:
+        repeat(3, 1fr);
+
+      gap: 16px;
+
+      margin-top: 22px;
+    }
+
+    .setting-box {
+      background: #faf8f3;
+
+      border: 1px solid #eee9df;
+      border-radius: 16px;
+
+      padding: 17px;
+    }
+
+    label {
+      display: block;
+
+      margin-bottom: 9px;
+
+      font-size: 15px;
+      font-weight: 700;
+
+      color: #4e5852;
+    }
+
+    select {
+      width: 100%;
+
+      padding: 12px 13px;
+
+      border: 1px solid #dcd9d2;
+      border-radius: 11px;
+
+      background: white;
+      color: #30343b;
+
+      font-size: 16px;
+
+      outline: none;
+      cursor: pointer;
+    }
+
+    select:focus {
+      border-color: #9eb2a1;
+    }
+
+    /* ================================
+       MAIN START BUTTON
+    ================================= */
+
+    .big-start {
+      width: 100%;
+
+      margin-top: 22px;
+      padding: 17px;
+
+      border: none;
+      border-radius: 15px;
+
+      background: #607d68;
+      color: white;
+
+      font-size: 19px;
+      font-weight: bold;
+
+      cursor: pointer;
+
+      transition: 0.2s;
+    }
+
+    .big-start:hover {
+      background: #536e5b;
+      transform: translateY(-1px);
+    }
+
+    /* ================================
+       READING AREA
+    ================================= */
+
+    #readingArea {
+      display: none;
+    }
+
+    .reader {
+      width: 100%;
+
+      min-height: 390px;
+
+      padding: 45px 50px;
+
+      background: #fffdf8;
+
+      border: 3px solid #eee7dc;
+      border-radius: 26px;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      text-align: center;
+
+      overflow: hidden;
+    }
+
+    #word {
+      width: 100%;
+      max-width: 950px;
+
+      margin: auto;
+
+      font-size: 72px;
+      font-weight: 600;
+
+      line-height: 1.35;
+
+      color: #2f3432;
+
+      white-space: normal;
+
+      word-break: normal;
+      overflow-wrap: break-word;
+
+      transition: font-size 0.15s ease;
+    }
+
+    /* ================================
+       PROGRESS
+    ================================= */
+
+    .progress-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      margin-top: 20px;
+      margin-bottom: 9px;
+
+      color: #7a807c;
+
+      font-size: 15px;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 12px;
+
+      background: #eeeae3;
+
+      border-radius: 20px;
+
+      overflow: hidden;
+    }
+
+    #progress {
+      width: 0%;
+      height: 100%;
+
+      background: #8da58f;
+
+      border-radius: 20px;
+
+      transition: width 0.2s ease;
+    }
+
+    /* ================================
+       CONTROLS
+    ================================= */
+
+    .controls {
+      display: flex;
+      justify-content: center;
+
+      flex-wrap: wrap;
+
+      gap: 12px;
+
+      margin-top: 25px;
+    }
+
+    .control-button {
+      min-width: 135px;
+
+      padding: 14px 18px;
+
+      border: none;
+      border-radius: 15px;
+
+      background: #f0eee9;
+      color: #3d4340;
+
+      font-size: 16px;
+      font-weight: bold;
+
+      cursor: pointer;
+
+      transition: 0.15s;
+    }
+
+    .control-button:hover {
+      transform: translateY(-1px);
+    }
+
+    .play-button {
+      background: #607d68;
+      color: white;
+    }
+
+    .play-button:hover {
+      background: #536e5b;
+    }
+
+    .pause-button {
+      background: #f2dfaa;
+      color: #554b32;
+    }
+
+    /* ================================
+       READING SETTINGS
+    ================================= */
+
+    .reading-settings {
+      display: grid;
+
+      grid-template-columns:
+        repeat(3, 1fr);
+
+      gap: 14px;
+
+      margin-top: 25px;
+    }
+
+    .small-setting {
+      padding: 14px;
+
+      background: #faf8f3;
+
+      border: 1px solid #eee9df;
+      border-radius: 15px;
+    }
+
+    .small-setting label {
+      margin-bottom: 7px;
+      font-size: 14px;
+    }
+
+    /* ================================
+       FONT +/- BUTTONS
+    ================================= */
+
+    .font-buttons {
+      display: flex;
+      gap: 8px;
+    }
+
+    .font-buttons button {
+      flex: 1;
+
+      padding: 11px;
+
+      border: 1px solid #ddd9d1;
+      border-radius: 10px;
+
+      background: white;
+
+      font-size: 18px;
+      font-weight: bold;
+
+      cursor: pointer;
+    }
+
+    .font-buttons button:hover {
+      background: #f2f0eb;
+    }
+
+    /* ================================
+       BACK BUTTON
+    ================================= */
+
+    .back-button {
+      display: block;
+
+      margin: 24px auto 0;
+
+      padding: 8px 15px;
+
+      border: none;
+      background: transparent;
+
+      color: #7b817e;
+
+      font-size: 15px;
+
+      cursor: pointer;
+    }
+
+    .back-button:hover {
+      text-decoration: underline;
+    }
+
+    /* ================================
+       FINISH SCREEN
+    ================================= */
+
+    #word.finish {
+      font-size: 48px !important;
+      line-height: 1.5;
+    }
+
+    .finish-small {
+      display: inline-block;
+
+      margin-top: 12px;
+
+      font-size: 27px;
+      font-weight: normal;
+
+      color: #69736d;
+    }
+
+    /* ================================
+       MOBILE
+    ================================= */
+
+    @media (max-width: 800px) {
+
+      .settings,
+      .reading-settings {
+        grid-template-columns: 1fr;
+      }
+
+      .container {
+        width: 95%;
+        margin-top: 20px;
+      }
+
+      .card {
+        padding: 20px;
+      }
+
+      .reader {
+        min-height: 340px;
+        padding: 30px 22px;
+      }
+
+      #word {
+        font-size: 58px;
+      }
+    }
+
+    @media (max-width: 500px) {
+
+      .header h1 {
+        font-size: 28px;
+      }
+
+      .reader {
+        min-height: 320px;
+        padding: 25px 15px;
+      }
+
+      #word {
+        font-size: 48px;
+      }
+
+      .control-button {
+        min-width: 46%;
+      }
+    }
+  </style>
+</head>
+
+
+<body>
+
+<div class="container">
+
+  <!-- HEADER -->
+
+  <div class="header">
+
+    <h1>
+      📖 Уншлагын дасгал
+    </h1>
+
+    <p>
+      Үгээ анхааралтай уншаад,
+      өөрийн хурдаар дасгал хийгээрэй.
+    </p>
+
+  </div>
+
+
+  <div class="card">
+
+
+    <!-- =================================
+         БАГШИЙН ТОХИРГОО
+    ================================== -->
+
+    <div id="setupArea">
+
+      <h2>
+        ✏️ Унших текст
+      </h2>
+
+
+      <textarea
+        id="textInput"
+        placeholder="Энд хүүхдийн унших текстийг оруулна уу..."
+      ></textarea>
+
+
+      <div class="settings">
+
+
+        <!-- WORD COUNT -->
+
+        <div class="setting-box">
+
+          <label>
+            📚 Нэг дор харуулах үг
+          </label>
+
+          <select id="wordCount">
+
+            <option value="1">
+              1 үг
+            </option>
+
+            <option value="2">
+              2 үг
+            </option>
+
+            <option value="3">
+              3 үг
+            </option>
+
+            <option value="4">
+              4 үг
+            </option>
+
+            <option value="5" selected>
+              5 үг
+            </option>
+
+            <option value="6">
+              6 үг
+            </option>
+
+            <option value="7">
+              7 үг
+            </option>
+
+            <option value="8">
+              8 үг
+            </option>
+
+            <option value="9">
+              9 үг
+            </option>
+
+            <option value="10">
+              10 үг
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <!-- SPEED -->
+
+        <div class="setting-box">
+
+          <label>
+            ⏱ Унших хурд
+          </label>
+
+          <select id="speed">
+
+            <option value="100">
+              🐢 Маш удаан — 100
+            </option>
+
+            <option value="140">
+              🌱 Удаан — 140
+            </option>
+
+            <option value="180" selected>
+              🙂 Хэвийн — 180
+            </option>
+
+            <option value="220">
+              🐇 Хурдан — 220
+            </option>
+
+            <option value="280">
+              🚀 Маш хурдан — 280
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <!-- FONT SIZE -->
+
+        <div class="setting-box">
+
+          <label>
+            🔤 Үсгийн хэмжээ
+          </label>
+
+          <select id="fontSize">
+
+            <option value="48">
+              Жижиг
+            </option>
+
+            <option value="60">
+              Дунд
+            </option>
+
+            <option value="72" selected>
+              Том
+            </option>
+
+            <option value="84">
+              Маш том
+            </option>
+
+            <option value="96">
+              Хамгийн том
+            </option>
+
+          </select>
+
+        </div>
+
+      </div>
+
+
+      <button
+        class="big-start"
+        onclick="openReader()"
+      >
+        📖 Уншиж эхлэх
+      </button>
+
+    </div>
+
+
+
+    <!-- =================================
+         ХҮҮХДИЙН УНШИХ ДЭЛГЭЦ
+    ================================== -->
+
+    <div id="readingArea">
+
+
+      <!-- TEXT DISPLAY -->
+
+      <div class="reader">
+
+        <div id="word">
+          Бэлэн үү? 😊
+        </div>
+
+      </div>
+
+
+
+      <!-- PROGRESS -->
+
+      <div class="progress-info">
+
+        <span id="status">
+          0 / 0 үг
+        </span>
+
+        <span id="percent">
+          0%
+        </span>
+
+      </div>
+
+
+      <div class="progress-bar">
+
+        <div id="progress">
+        </div>
+
+      </div>
+
+
+
+      <!-- CONTROLS -->
+
+      <div class="controls">
+
+        <button
+          class="control-button"
+          onclick="previousWords()"
+        >
+          ⏮ Өмнөх
+        </button>
+
+
+        <button
+          class="control-button play-button"
+          onclick="startReading()"
+        >
+          ▶ Эхлэх
+        </button>
+
+
+        <button
+          class="control-button pause-button"
+          onclick="pauseReading()"
+        >
+          ⏸ Түр зогсоох
+        </button>
+
+
+        <button
+          class="control-button"
+          onclick="nextWords()"
+        >
+          Дараах ⏭
+        </button>
+
+      </div>
+
+
+
+      <!-- LIVE SETTINGS -->
+
+      <div class="reading-settings">
+
+
+        <!-- WORD COUNT -->
+
+        <div class="small-setting">
+
+          <label>
+            📚 Нэг дор харуулах
+          </label>
+
+          <select
+            id="readerWordCount"
+            onchange="changeWordCount()"
+          >
+
+            <option value="1">1 үг</option>
+            <option value="2">2 үг</option>
+            <option value="3">3 үг</option>
+            <option value="4">4 үг</option>
+            <option value="5">5 үг</option>
+            <option value="6">6 үг</option>
+            <option value="7">7 үг</option>
+            <option value="8">8 үг</option>
+            <option value="9">9 үг</option>
+            <option value="10">10 үг</option>
+
+          </select>
+
+        </div>
+
+
+
+        <!-- SPEED -->
+
+        <div class="small-setting">
+
+          <label>
+            ⏱ Унших хурд
+          </label>
+
+          <select
+            id="readerSpeed"
+            onchange="changeSpeed()"
+          >
+
+            <option value="100">
+              🐢 Маш удаан
+            </option>
+
+            <option value="140">
+              🌱 Удаан
+            </option>
+
+            <option value="180">
+              🙂 Хэвийн
+            </option>
+
+            <option value="220">
+              🐇 Хурдан
+            </option>
+
+            <option value="280">
+              🚀 Маш хурдан
+            </option>
+
+          </select>
+
+        </div>
+
+
+
+        <!-- FONT CONTROLS -->
+
+        <div class="small-setting">
+
+          <label>
+            🔤 Үсгийн хэмжээ
+          </label>
+
+
+          <div class="font-buttons">
+
+            <button
+              onclick="decreaseFont()"
+              title="Үсгийг жижигрүүлэх"
+            >
+              A−
+            </button>
+
+
+            <button
+              onclick="resetFont()"
+              title="Анхны хэмжээ"
+            >
+              A
+            </button>
+
+
+            <button
+              onclick="increaseFont()"
+              title="Үсгийг томруулах"
+            >
+              A+
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+
+      <!-- BACK -->
+
+      <button
+        class="back-button"
+        onclick="backToSetup()"
+      >
+        ← Текст болон тохиргоогоо өөрчлөх
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+
+<script>
+
+  /* =====================================
+     VARIABLES
+  ====================================== */
+
+  let words = [];
+
+  let currentIndex = 0;
+
+  let timer = null;
+
+  let isPlaying = false;
+
+  let currentFontSize = 72;
+
+
+  /* =====================================
+     ELEMENTS
+  ====================================== */
+
+  const textInput =
+    document.getElementById("textInput");
+
+  const wordDisplay =
+    document.getElementById("word");
+
+  const setupArea =
+    document.getElementById("setupArea");
+
+  const readingArea =
+    document.getElementById("readingArea");
+
+  const wordCountInput =
+    document.getElementById("wordCount");
+
+  const speedInput =
+    document.getElementById("speed");
+
+  const fontSizeInput =
+    document.getElementById("fontSize");
+
+  const readerWordCount =
+    document.getElementById("readerWordCount");
+
+  const readerSpeed =
+    document.getElementById("readerSpeed");
+
+  const progress =
+    document.getElementById("progress");
+
+  const status =
+    document.getElementById("status");
+
+  const percent =
+    document.getElementById("percent");
+
+
+  /* =====================================
+     OPEN READER
+  ====================================== */
+
+  function openReader() {
+
+    const text =
+      textInput.value.trim();
+
+
+    if (!text) {
+
+      alert(
+        "Эхлээд унших текстээ оруулна уу 😊"
+      );
+
+      return;
+    }
+
+
+    words =
+      text.split(/\s+/);
+
+
+    currentIndex = 0;
+
+
+    readerWordCount.value =
+      wordCountInput.value;
+
+
+    readerSpeed.value =
+      speedInput.value;
+
+
+    currentFontSize =
+      parseInt(
+        fontSizeInput.value
+      );
+
+
+    wordDisplay.style.fontSize =
+      currentFontSize + "px";
+
+
+    setupArea.style.display =
+      "none";
+
+
+    readingArea.style.display =
+      "block";
+
+
+    wordDisplay.classList.remove(
+      "finish"
+    );
+
+
+    wordDisplay.innerText =
+      "Бэлэн үү? 😊";
+
+
+    updateProgress();
+  }
+
+
+
+  /* =====================================
+     START
+  ====================================== */
+
+  function startReading() {
+
+    if (isPlaying) {
+      return;
+    }
+
+
+    if (words.length === 0) {
+      return;
+    }
+
+
+    if (
+      currentIndex >= words.length
+    ) {
+
+      currentIndex = 0;
+    }
+
+
+    wordDisplay.classList.remove(
+      "finish"
+    );
+
+
+    isPlaying = true;
+
+
+    showNextWords();
+  }
+
+
+
+  /* =====================================
+     SHOW NEXT WORDS
+  ====================================== */
+
+  function showNextWords() {
+
+    if (!isPlaying) {
+      return;
+    }
+
+
+    if (
+      currentIndex >= words.length
+    ) {
+
+      finishReading();
+
+      return;
+    }
+
+
+    wordDisplay.classList.remove(
+      "finish"
+    );
+
+
+    const count =
+      parseInt(
+        readerWordCount.value
+      );
+
+
+    const selectedWords =
+      words.slice(
+        currentIndex,
+        currentIndex + count
+      );
+
+
+    wordDisplay.innerText =
+      selectedWords.join(" ");
+
+
+    currentIndex +=
+      selectedWords.length;
+
+
+    updateProgress();
+
+
+    const wpm =
+      parseInt(
+        readerSpeed.value
+      );
+
+
+    /*
+      Жишээ:
+
+      180 WPM үед
+      нэг үг ≈ 333 ms.
+
+      5 үг зэрэг гарвал
+      ойролцоогоор 1.6 секунд
+      харагдана.
+    */
+
+    const delay =
+      (60000 / wpm)
+      * selectedWords.length;
+
+
+    clearTimeout(timer);
+
+
+    timer =
+      setTimeout(
+        showNextWords,
+        delay
+      );
+  }
+
+
+
+  /* =====================================
+     PAUSE
+  ====================================== */
+
+  function pauseReading() {
+
+    isPlaying = false;
+
+    clearTimeout(timer);
+
+    timer = null;
+  }
+
+
+
+  /* =====================================
+     MANUAL DISPLAY
+  ====================================== */
+
+  function showManualWords() {
+
+    if (
+      currentIndex >= words.length
+    ) {
+
+      finishReading();
+
+      return;
+    }
+
+
+    wordDisplay.classList.remove(
+      "finish"
+    );
+
+
+    const count =
+      parseInt(
+        readerWordCount.value
+      );
+
+
+    const selectedWords =
+      words.slice(
+        currentIndex,
+        currentIndex + count
+      );
+
+
+    wordDisplay.innerText =
+      selectedWords.join(" ");
+
+
+    currentIndex +=
+      selectedWords.length;
+
+
+    updateProgress();
+  }
+
+
+
+  /* =====================================
+     PREVIOUS
+  ====================================== */
+
+  function previousWords() {
+
+    pauseReading();
+
+
+    const count =
+      parseInt(
+        readerWordCount.value
+      );
+
+
+    /*
+      currentIndex нь одоо
+      харагдаж байгаа хэсгийн
+      төгсгөл дээр байдаг.
+
+      Тиймээс 2 хэсэг ухраад
+      өмнөх хэсгийг харуулна.
+    */
+
+    currentIndex =
+      Math.max(
+        0,
+        currentIndex - count * 2
+      );
+
+
+    showManualWords();
+  }
+
+
+
+  /* =====================================
+     NEXT
+  ====================================== */
+
+  function nextWords() {
+
+    pauseReading();
+
+    showManualWords();
+  }
+
+
+
+  /* =====================================
+     CHANGE WORD COUNT
+  ====================================== */
+
+  function changeWordCount() {
+
+    pauseReading();
+
+
+    wordCountInput.value =
+      readerWordCount.value;
+  }
+
+
+
+  /* =====================================
+     CHANGE SPEED
+  ====================================== */
+
+  function changeSpeed() {
+
+    speedInput.value =
+      readerSpeed.value;
+
+
+    /*
+      Хэрэв яг уншиж байхдаа
+      хурд өөрчилсөн бол
+      уншлагыг шинэ хурдаар
+      үргэлжлүүлнэ.
+    */
+
+    if (isPlaying) {
+
+      clearTimeout(timer);
+
+      timer = null;
+
+      showNextWords();
+    }
+  }
+
+
+
+  /* =====================================
+     FONT SIZE
+  ====================================== */
+
+  function increaseFont() {
+
+    if (
+      currentFontSize < 110
+    ) {
+
+      currentFontSize += 6;
+
+    }
+
+
+    applyFontSize();
+  }
+
+
+  function decreaseFont() {
+
+    if (
+      currentFontSize > 36
+    ) {
+
+      currentFontSize -= 6;
+
+    }
+
+
+    applyFontSize();
+  }
+
+
+  function resetFont() {
+
+    currentFontSize =
+      parseInt(
+        fontSizeInput.value
+      );
+
+
+    applyFontSize();
+  }
+
+
+  function applyFontSize() {
+
+    wordDisplay.style.fontSize =
+      currentFontSize + "px";
+  }
+
+
+
+  /* =====================================
+     PROGRESS
+  ====================================== */
+
+  function updateProgress() {
+
+    let progressPercent = 0;
+
+
+    if (
+      words.length > 0
+    ) {
+
+      progressPercent =
+        (
+          currentIndex
+          / words.length
+        ) * 100;
+    }
+
+
+    progressPercent =
+      Math.min(
+        progressPercent,
+        100
+      );
+
+
+    progress.style.width =
+      progressPercent + "%";
+
+
+    status.innerText =
+      Math.min(
+        currentIndex,
+        words.length
+      )
+      + " / "
+      + words.length
+      + " үг";
+
+
+    percent.innerText =
+      Math.round(
+        progressPercent
+      )
+      + "%";
+  }
+
+
+
+  /* =====================================
+     FINISH
+  ====================================== */
+
+  function finishReading() {
+
+    pauseReading();
+
+
+    currentIndex =
+      words.length;
+
+
+    updateProgress();
+
+
+    wordDisplay.classList.add(
+      "finish"
+    );
+
+
+    wordDisplay.innerHTML =
+      "🌟 Мундаг байна! 🌟"
+      +
+      "<br>"
+      +
+      "<span class='finish-small'>"
+      +
+      "Уншлагын дасгалаа амжилттай дуусгалаа."
+      +
+      "</span>";
+  }
+
+
+
+  /* =====================================
+     BACK TO SETUP
+  ====================================== */
+
+  function backToSetup() {
+
+    pauseReading();
+
+
+    readingArea.style.display =
+      "none";
+
+
+    setupArea.style.display =
+      "block";
+
+
+    /*
+      Сурагчийн дэлгэц дээр
+      өөрчилсөн утгуудыг
+      үндсэн тохиргоонд хадгална.
+    */
+
+    wordCountInput.value =
+      readerWordCount.value;
+
+
+    speedInput.value =
+      readerSpeed.value;
+  }
+
+
+
+  /* =====================================
+     KEYBOARD CONTROLS
+  ====================================== */
+
+  document.addEventListener(
+    "keydown",
+    function(event) {
+
+
+      if (
+        readingArea.style.display
+        !== "block"
+      ) {
+
+        return;
+      }
+
+
+      /*
+        SPACE
+        Start / Pause
+      */
+
+      if (
+        event.code === "Space"
+      ) {
+
+        event.preventDefault();
+
+
+        if (isPlaying) {
+
+          pauseReading();
+
+        }
+
+        else {
+
+          startReading();
+
+        }
+      }
+
+
+      /*
+        LEFT ARROW
+        Previous
+      */
+
+      if (
+        event.code === "ArrowLeft"
+      ) {
+
+        event.preventDefault();
+
+        previousWords();
+      }
+
+
+      /*
+        RIGHT ARROW
+        Next
+      */
+
+      if (
+        event.code === "ArrowRight"
+      ) {
+
+        event.preventDefault();
+
+        nextWords();
+      }
+
+
+      /*
+        + = FONT BIGGER
+      */
+
+      if (
+        event.key === "+"
+        ||
+        event.key === "="
+      ) {
+
+        increaseFont();
+      }
+
+
+      /*
+        - = FONT SMALLER
+      */
+
+      if (
+        event.key === "-"
+      ) {
+
+        decreaseFont();
+      }
+
+    }
+  );
+
+</script>
+
+</body>
+</html>
